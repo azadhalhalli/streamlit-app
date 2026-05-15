@@ -6,3 +6,4 @@ scikit-learn
 emoji
 huggingface_hub
 xgboost
+lightgbm
