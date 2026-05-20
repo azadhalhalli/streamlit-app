@@ -14,7 +14,7 @@ from pathlib import Path
 
 # ── Sayfa Ayarları ─────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Twitter Duygu Analizi",
+    page_title="Sosyal Medya Duygu Duyarlılık Analizi",
     page_icon="🐦",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -322,7 +322,7 @@ with st.sidebar:
         <div style='font-family:Space Mono,monospace;font-size:1.1rem;font-weight:700;color:#fff;'>
             🐦 SentimentAI
         </div>
-        <div style='font-size:0.75rem;color:#8b949e;margin-top:2px;'>Twitter · Duygu Analizi</div>
+        <div style='font-size:0.75rem;color:#8b949e;margin-top:2px;'>Sosyal Medya · Duygu Duyarlılık Analizi</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -379,7 +379,7 @@ with st.sidebar:
 # ── Ana İçerik ─────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class='hero-bar'>
-    <div class='hero-title'>🐦 Twitter Duygu Analizi</div>
+    <div class='hero-title'>🐦 Sosyal Medya Duygu Duyarlılık Analizi</div>
     <div class='hero-sub'>7 Model × 4 Dengesizlik Stratejisi &nbsp;·&nbsp; TF-IDF + Feature Engineering &nbsp;·&nbsp; XAI/SHAP</div>
 </div>
 """, unsafe_allow_html=True)
