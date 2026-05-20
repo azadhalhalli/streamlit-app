@@ -411,11 +411,11 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
             st.markdown("##### ✍️ Metin Girin")
             example_tweets = [
                 "Özel metin...",
-                "Bu yeni ürün gerçekten harika! Hayatımı kolaylaştırdı 🚀",
-                "Bu hizmetten son derece memnun kalmadım, tam bir hayal kırıklığı.",
-                "Bugün yeni bir güncelleme yayınlandı. Detaylara göz atın.",
-                "Bu deneyimin ne kadar kötü olduğuna inanamıyorum. Bir daha asla! 😡",
-                "Yeni düzenlemeler hakkında kararsızım, daha fazla bilgiye ihtiyacım var.",
+                "This new product is really great! It made my life easier 🚀",
+                "I am extremely dissatisfied with this service, it is a complete disappointment.",
+                "A new update was released today. Check out the details.",
+                "I can't believe how bad this experience was. Never again! 😡",
+                "I'm undecided about the new regulations, I need more information.",
             ]
             selected_example = st.selectbox(
                 "Örnek metin seç (veya aşağıya yaz):",
