@@ -14,8 +14,8 @@ from pathlib import Path
 
 # ── Sayfa Ayarları ─────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Twitter Duygu Analizi",
-    page_icon="🐦",
+    page_title="Metin Duygu Duyarlılık Analizi",
+    page_icon="📝",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -320,9 +320,9 @@ with st.sidebar:
     st.markdown("""
     <div style='padding:8px 0 16px 0;'>
         <div style='font-family:Space Mono,monospace;font-size:1.1rem;font-weight:700;color:#fff;'>
-            🐦 SentimentAI
+            📝 SentimentAI
         </div>
-        <div style='font-size:0.75rem;color:#8b949e;margin-top:2px;'>Twitter · Duygu Analizi</div>
+        <div style='font-size:0.75rem;color:#8b949e;margin-top:2px;'>Metin · Duygu Duyarlılık Analizi</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -370,7 +370,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("""
     <div style='font-size:0.72rem;color:#484f58;line-height:1.6;'>
-        <b style='color:#8b949e;'>Veri Seti:</b> 217,622 tweet<br>
+        <b style='color:#8b949e;'>Veri Seti:</b> 217,622 metin<br>
         <b style='color:#8b949e;'>Features:</b> TF-IDF (5K) + FE (13)<br>
         <b style='color:#8b949e;'>Stratejiler:</b> SMOTE, Class Weight<br>
     </div>
@@ -379,7 +379,7 @@ with st.sidebar:
 # ── Ana İçerik ─────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class='hero-bar'>
-    <div class='hero-title'>🐦 Twitter Duygu Analizi</div>
+    <div class='hero-title'>📝 Metin Duygu Duyarlılık Analizi</div>
     <div class='hero-sub'>7 Model × 4 Dengesizlik Stratejisi &nbsp;·&nbsp; TF-IDF + Feature Engineering &nbsp;·&nbsp; XAI/SHAP</div>
 </div>
 """, unsafe_allow_html=True)
@@ -408,26 +408,27 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
         col_input, col_result = st.columns([1.1, 1], gap="large")
 
         with col_input:
-            st.markdown("##### ✍️ Tweet Girin")
+            st.markdown("##### ✍️ Metin Girin")
             example_tweets = [
-                "Custom tweet...",
-                "OpenAI's new ChatGPT is absolutely amazing! Best AI tool ever 🚀",
-                "This product is terrible, completely disappointed with the service.",
-                "Just released a new update for our platform. Check it out.",
-                "I can't believe how bad this experience was. Never using this again! 😡",
-                "Feeling neutral about the new AI regulations. Need more info.",
+                "Custom text...",
+                "I absolutely love this new restaurant, the food was amazing and the service was excellent! 🚀",
+                "The package arrived damaged and the customer service was unhelpful. Very disappointing experience.",
+                "The conference will be held next week at the main hall. Registration is open.",
+                "Worst purchase I have ever made. Completely useless, waste of money! 😡",
+                "The weather report indicates mild temperatures for the upcoming weekend.",
             ]
             selected_example = st.selectbox(
-                "Örnek tweet seç (veya aşağıya yaz):",
+                "Örnek metin seç (veya aşağıya yaz):",
                 example_tweets,
                 label_visibility="visible",
             )
 
             tweet_text = st.text_area(
-                "Tweet metni",
-                value="" if selected_example == "Custom tweet..." else selected_example,
+                "Metin",
+                value="" if selected_example == "Custom text..." else selected_example,
                 height=120,
-                placeholder="Analiz etmek istediğiniz tweet'i buraya girin...",
+                max_chars=5000,
+                placeholder="Analiz etmek istediğiniz metni buraya girin... (en fazla 5000 karakter)",
                 label_visibility="collapsed",
             )
 
@@ -435,7 +436,7 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
             word_count = len(tweet_text.split()) if tweet_text.strip() else 0
             st.markdown(
                 f"<div style='font-size:0.75rem;color:#484f58;text-align:right;margin-top:-8px;'>"
-                f"{char_count} karakter · {word_count} kelime</div>",
+                f"{char_count} / 5000 karakter · {word_count} kelime</div>",
                 unsafe_allow_html=True,
             )
 
@@ -489,7 +490,7 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
                     <div class='result-card {label}'>
                         <div class='result-emoji'>{EMOJI_MAP[label]}</div>
                         <div class='result-label {label}'>{label.upper()}</div>
-                        {'<div class="result-conf">Güven: ' + f'{max(proba)*100:.1f}%</div>' if proba is not None else ''}
+                        {'<div class="result-conf">Macro-F1: ' + f'{max(proba):.4f}</div>' if proba is not None else ''}
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -520,77 +521,15 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
                     )
 
             elif analyze_btn:
-                st.warning("⚠️ Lütfen bir tweet girin.")
+                st.warning("⚠️ Lütfen bir metin girin.")
             else:
                 st.markdown("""
                 <div style='display:flex;flex-direction:column;align-items:center;justify-content:center;
                 height:200px;border:1px dashed #30363D;border-radius:10px;'>
                     <div style='font-size:2.5rem;margin-bottom:8px;opacity:0.4;'>🔍</div>
-                    <div style='font-size:0.85rem;color:#484f58;'>Tweet girin ve "ANALİZ ET" butonuna basın</div>
+                    <div style='font-size:0.85rem;color:#484f58;'>Metin girin ve "ANALİZ ET" butonuna basın</div>
                 </div>
                 """, unsafe_allow_html=True)
-
-        # Toplu analiz
-        st.markdown("---")
-        st.markdown("##### 📋 Toplu Analiz")
-        bulk_text = st.text_area(
-            "Her satıra bir tweet girin:",
-            height=120,
-            placeholder="Tweet 1\nTweet 2\nTweet 3\n...",
-            label_visibility="visible",
-        )
-
-        bulk_model_choice = st.selectbox(
-            "Toplu analiz modeli:",
-            ["SVM | SMOTE", "LGBM | Class Weight"],
-        )
-
-        if st.button("📊  TOPLU ANALİZ", use_container_width=False) and bulk_text.strip():
-            bulk_key = 'SVM  | SMOTE' if "SVM" in bulk_model_choice else 'LGBM | Class Weight'
-            bulk_model = results.get(bulk_key, {}).get('model') if results else None
-
-            if bulk_model:
-                tweets = [t.strip() for t in bulk_text.strip().split('\n') if t.strip()]
-                with st.spinner(f"{len(tweets)} tweet analiz ediliyor..."):
-                    preds = []
-                    for t in tweets:
-                        lbl, proba, _, _ = predict_tweet(t, bulk_model, tfidf, emoji_lib)
-                        conf = f"{max(proba)*100:.1f}%" if proba is not None else "—"
-                        preds.append({'Tweet': t[:60] + ('...' if len(t) > 60 else ''),
-                                      'Duygu': lbl.upper(), 'Güven': conf})
-
-                import pandas as pd
-                df_result = pd.DataFrame(preds)
-
-                # Renk uygula
-                def color_label(val):
-                    c = {'BAD': '#E74C3C', 'GOOD': '#2ECC71', 'NEUTRAL': '#3498DB'}.get(val, '')
-                    return f'color: {c}; font-weight: bold; font-family: Space Mono, monospace;'
-
-                st.dataframe(
-                    df_result.style.applymap(color_label, subset=['Duygu']),
-                    use_container_width=True,
-                    hide_index=True,
-                )
-
-                # Dağılım grafiği
-                counts = df_result['Duygu'].value_counts()
-                fig, ax = plt.subplots(figsize=(6, 3), facecolor=DARK)
-                ax.set_facecolor(PANEL)
-                labels = counts.index.tolist()
-                vals   = counts.values.tolist()
-                colors = [COLORS.get(l.lower(), '#888') for l in labels]
-                bars = ax.bar(labels, vals, color=colors, edgecolor=DARK, linewidth=1.5, width=0.5)
-                for b in bars:
-                    ax.text(b.get_x() + b.get_width()/2, b.get_height() + 0.15,
-                            str(int(b.get_height())), ha='center', color='white', fontsize=10, fontweight='bold')
-                for sp in ax.spines.values(): sp.set_color(BORDER)
-                ax.tick_params(colors=TEXT)
-                ax.set_title('Duygu Dağılımı', color='white', fontsize=10, fontweight='bold')
-                ax.set_ylabel('Adet', color=TEXT)
-                plt.tight_layout()
-                st.pyplot(fig)
-                plt.close(fig)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # TAB 2 — Model Karşılaştırması
@@ -735,17 +674,17 @@ with tab3:
     with col1:
         st.markdown("""
         ### 🎓 Proje Hakkında
-        Bu uygulama bir **Bitirme Tezi** kapsamında geliştirilen Twitter duygu analizi
+        Bu uygulama bir **Bitirme Tezi** kapsamında geliştirilen metin duygu analizi
         sisteminin interaktif arayüzüdür.
 
         **Pipeline:**
-        > Ham Tweet → Ön İşleme → TF-IDF + Feature Engineering → Model → Tahmin
+        > Ham Metin → Ön İşleme → TF-IDF + Feature Engineering → Model → Tahmin
 
         ---
         ### 📊 Veri Seti
         | Özellik | Değer |
         |---------|-------|
-        | Toplam tweet | 217,622 |
+        | Toplam metin | 217,622 |
         | Sınıflar | bad / good / neutral |
         | TF-IDF features | 5,000 |
         | FE features | 13 |
@@ -793,8 +732,7 @@ with tab3:
     st.markdown("---")
     st.markdown("""
     <div style='text-align:center;color:#484f58;font-size:0.8rem;padding:16px 0;'>
-        Twitter Duygu Analizi · Bitirme Tezi &nbsp;·&nbsp;
+        Metin Duygu Duyarlılık Analizi · Bitirme Tezi &nbsp;·&nbsp;
         <span style='font-family:Space Mono,monospace;'>TF-IDF + Feature Engineering + SHAP</span>
     </div>
     """, unsafe_allow_html=True)
-
