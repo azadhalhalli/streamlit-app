@@ -410,12 +410,12 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
         with col_input:
             st.markdown("##### ✍️ Metin Girin")
             example_tweets = [
-                "Özel metin...",
-                "This new product is really great! It made my life easier 🚀",
-                "I am extremely dissatisfied with this service, it is a complete disappointment.",
-                "A new update was released today. Check out the details.",
-                "I can't believe how bad this experience was. Never again! 😡",
-                "I'm undecided about the new regulations, I need more information.",
+                "Custom text...",
+                "I absolutely love this new restaurant, the food was amazing and the service was excellent! 🚀",
+                "The package arrived damaged and the customer service was unhelpful. Very disappointing experience.",
+                "The conference will be held next week at the main hall. Registration is open.",
+                "Worst purchase I have ever made. Completely useless, waste of money! 😡",
+                "The weather report indicates mild temperatures for the upcoming weekend.",
             ]
             selected_example = st.selectbox(
                 "Örnek metin seç (veya aşağıya yaz):",
@@ -425,7 +425,7 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
 
             tweet_text = st.text_area(
                 "Metin",
-                value="" if selected_example == "Özel metin..." else selected_example,
+                value="" if selected_example == "Custom text..." else selected_example,
                 height=120,
                 max_chars=5000,
                 placeholder="Analiz etmek istediğiniz metni buraya girin... (en fazla 5000 karakter)",
@@ -481,10 +481,6 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
                     badge_cls = "svm" if model_key == "svm" else "lgbm"
                     color = COLORS[label]
 
-                    # Modelin macro-F1 skorunu results.pkl'den al
-                    results_key = 'SVM  | SMOTE' if model_key == 'svm' else 'LGBM | Class Weight'
-                    model_f1 = results.get(results_key, {}).get('macro_f1', 0)
-
                     st.markdown(
                         f"<span class='model-badge {badge_cls}'>{model_name}</span>",
                         unsafe_allow_html=True,
@@ -494,7 +490,7 @@ with open('results.pkl', 'wb') as f: pickle.dump(results, f)</pre>
                     <div class='result-card {label}'>
                         <div class='result-emoji'>{EMOJI_MAP[label]}</div>
                         <div class='result-label {label}'>{label.upper()}</div>
-                        <div class="result-conf">Macro-F1: {model_f1:.4f}</div>
+                        {'<div class="result-conf">Macro-F1: ' + f'{max(proba):.4f}</div>' if proba is not None else ''}
                     </div>
                     """, unsafe_allow_html=True)
 
